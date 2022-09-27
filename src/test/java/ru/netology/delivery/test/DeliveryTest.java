@@ -1,3 +1,4 @@
+/*
 package ru.netology.delivery.test;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,4 +29,4 @@ class DeliveryTest {
         // generateName(locale), generatePhone(locale) для генерации и получения в тесте соответственно города,
         // имени и номера телефона без создания пользователя в методе generateUser(String locale) в датагенераторе
     }
-}
+}*/

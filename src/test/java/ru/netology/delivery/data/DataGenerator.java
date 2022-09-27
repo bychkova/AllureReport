@@ -1,3 +1,4 @@
+/*
 package ru.netology.delivery.data;
 
 import com.github.javafaker.Faker;
@@ -54,4 +55,4 @@ public class DataGenerator {
         String name;
         String phone;
     }
-}
+}*/
