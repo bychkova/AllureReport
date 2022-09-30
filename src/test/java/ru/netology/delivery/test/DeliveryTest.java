@@ -6,14 +6,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.netology.delivery.data.DataGenerator;
 
-import static com.codeborne.selenide.Selenide.open;
 
 class DeliveryTest {
 
-    @BeforeEach
+    */
+/*@BeforeEach
     void setup() {
         open("http://localhost:9999");
-    }
+    }*//*
+
 
     @Test
     @DisplayName("Should successful plan and replan meeting")
@@ -29,4 +30,5 @@ class DeliveryTest {
         // generateName(locale), generatePhone(locale) для генерации и получения в тесте соответственно города,
         // имени и номера телефона без создания пользователя в методе generateUser(String locale) в датагенераторе
     }
-}*/
+}
+*/
