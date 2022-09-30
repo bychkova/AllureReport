@@ -1,5 +1,6 @@
 package ru.netology.delivery.data;
 
+import com.github.javafaker.DateAndTime;
 import com.github.javafaker.Faker;
 import lombok.Value;
 import lombok.experimental.UtilityClass;
@@ -20,18 +21,13 @@ public class DataGenerator {
         return city;
     }
 
-    /*public static String generateDate(int shift) {
-        // TODO: добавить логику для объявления переменной date и задания её значения, для генерации строки с датой
-        // Вы можете использовать класс LocalDate и его методы для получения и форматирования даты
-        Faker faker = new Faker();
-        String date = faker.
-        return date;
-    }*/
-
+    public static String generateDate(int shift) {
+        return LocalDate.now().plusDays(shift).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    }
 
     public static String generateName(String locale) {
         Faker faker = new Faker(new Locale(locale));
-        String name = faker.funnyName().name();
+        String name = faker.name().fullName();
         return name;
     }
 

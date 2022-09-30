@@ -1,4 +1,3 @@
-/*
 package ru.netology.delivery.test;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -6,20 +5,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.netology.delivery.data.DataGenerator;
 
+import static ru.netology.delivery.data.DataGenerator.Registration.generateUser;
+
 
 class DeliveryTest {
-
-    */
-/*@BeforeEach
-    void setup() {
-        open("http://localhost:9999");
-    }*//*
-
 
     @Test
     @DisplayName("Should successful plan and replan meeting")
     void shouldSuccessfulPlanAndReplanMeeting() {
-        var validUser = DataGenerator.Registration.generateUser("ru");
+        var validUser = generateUser("ru");
         var daysToAddForFirstMeeting = 4;
         var firstMeetingDate = DataGenerator.generateDate(daysToAddForFirstMeeting);
         var daysToAddForSecondMeeting = 7;
@@ -30,5 +24,12 @@ class DeliveryTest {
         // generateName(locale), generatePhone(locale) для генерации и получения в тесте соответственно города,
         // имени и номера телефона без создания пользователя в методе generateUser(String locale) в датагенераторе
     }
+
+    @Test
+    void shouldGenerateTestData(){
+        DataGenerator.UserInfo user1 = generateUser("ru");
+        System.out.print(user1.getCity() + "\n" + user1.getName() + "\n" + user1.getPhone());
+    }
 }
-*/
+
+
