@@ -1,14 +1,35 @@
 package ru.netology.delivery.test;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import ru.netology.delivery.data.DataGenerator;
 
 import static ru.netology.delivery.data.DataGenerator.Registration.generateUser;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 class DeliveryTest {
+
+    private WebDriver driver;
+    @BeforeAll
+    static void setupAll() {
+        WebDriverManager.chromedriver().setup();
+    }
+    @BeforeEach
+    void setUp(){
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--headless");
+        driver = new ChromeDriver(options);
+    }
+    @AfterEach
+    public void close(){
+        driver.quit();
+        driver = null;
+    }
 
     @Test
     @DisplayName("Should successful plan and replan meeting")
@@ -28,7 +49,8 @@ class DeliveryTest {
     @Test
     void shouldGenerateTestData(){
         DataGenerator.UserInfo user1 = generateUser("ru");
-        System.out.print(user1.getCity() + "\n" + user1.getName() + "\n" + user1.getPhone());
+        System.out.println(user1.getCity() + "\n" + user1.getName() + "\n" + user1.getPhone());
+        System.out.println(DataGenerator.generateDate(7));
     }
 }
 
