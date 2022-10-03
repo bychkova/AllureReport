@@ -53,7 +53,7 @@ public class DataGenerator {
         }
 
         public static UserInfo generateValidUser(String locale) {
-            UserInfo user = new UserInfo(generateCity(), generateName(locale), generatePhone(locale), generateDate(4));
+            UserInfo user = new UserInfo(generateCity(), generateName(locale), generatePhone(locale));
             return user;
         }
     }
@@ -62,6 +62,5 @@ public class DataGenerator {
         String city;
         String name;
         String phone;
-        String date;
     }
 }
