@@ -1,65 +1,55 @@
 package ru.netology.delivery.test;
 
-import org.junit.jupiter.api.*;
-import org.openqa.selenium.By;
+import com.codeborne.selenide.Condition;
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import ru.netology.delivery.data.DataGenerator;
 
+import java.time.Duration;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static com.codeborne.selenide.Selenide.*;
 import static org.openqa.selenium.Keys.BACK_SPACE;
+import static org.openqa.selenium.Keys.DELETE;
 
 class DeliveryTest {
-
-    private WebDriver driver;
-
     @BeforeAll
-    static void setupAll() {
+    static void setUpAll() {
         WebDriverManager.chromedriver().setup();
     }
 
     @BeforeEach
-    void setUp() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--headless");
-        driver = new ChromeDriver(options);
-    }
-
-    @AfterEach
-    public void close() {
-        driver.quit();
-        driver = null;
+    void setup() {
+        open("http://localhost:9999");
     }
 
     @Test
-    void shouldSuccessfullyPlanAndReplanMeeting() {
-        DataGenerator.UserInfo user = DataGenerator.Registration.generateValidUser("ru");
-        driver.get("http://localhost:9999");
+    @DisplayName("Should successful plan and replan meeting")
+    void shouldSuccessfulPlanAndReplanMeeting() {
+        var validUser = DataGenerator.Registration.generateValidUser("ru");
+        var daysToAddForFirstMeeting = 4;
+        var firstMeetingDate = DataGenerator.generateDate(daysToAddForFirstMeeting);
+        var daysToAddForSecondMeeting = 7;
+        var secondMeetingDate = DataGenerator.generateDate(daysToAddForSecondMeeting);
 
-        driver.findElement(By.cssSelector("[data-test-id='city'] input")).sendKeys(user.getCity());
-        driver.findElement(By.cssSelector("[data-test-id='date'] input")).sendKeys(Keys.CONTROL + "A", BACK_SPACE);
-        driver.findElement(By.cssSelector("[data-test-id='date'] input")).sendKeys(user.getDate());
-        driver.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys(user.getName());
-        driver.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys(user.getPhone());
-        driver.findElement(By.cssSelector("[data-test-id='agreement'] .checkbox__box")).click();
-        driver.findElement(By.xpath("//*[@id=\"root\"]/div/form/fieldset/div[6]/div[2]/div/button")).click();
+        $("[data-test-id='city'] input").setValue(validUser.getCity());
+        $("[data-test-id='date'] input").sendKeys(Keys.COMMAND + "A");
+        $("[data-test-id='date'] input").sendKeys(BACK_SPACE);
+        $("[data-test-id='date'] input").setValue(firstMeetingDate);
+        $("[data-test-id='name'] input").setValue(validUser.getName());
+        $("[data-test-id='phone'] input").setValue(validUser.getPhone());
+        $("[data-test-id='agreement'] .checkbox__box").click();
+        $x("//span[contains(text(), 'Запланировать')]").click();
+        $("[data-test-id='success-notification'] .notification__content").shouldHave(Condition.exactText("Встреча успешно запланирована на " + firstMeetingDate));
 
-        driver.findElement(By.cssSelector("[data-test-id='date'] input")).sendKeys(Keys.CONTROL + "A", BACK_SPACE);
-        String secondDate = DataGenerator.generateDate(5);
-        driver.findElement(By.cssSelector("[data-test-id='date'] input")).sendKeys(secondDate);
-        driver.findElement(By.xpath("//*[@id=\"root\"]/div/form/fieldset/div[6]/div[2]/div/button")).click();
-        driver.findElement(By.xpath("//*[@id=\"root\"]/div/div[2]/div[3]/button")).click();
-
-        String actual = driver.findElement(By.cssSelector("[data-test-id='success-notification'] .notification__content")).getText();
-        String expected = "Встреча успешно запланирована на " + secondDate;
-
-        assertEquals(expected, actual);
+        $("[data-test-id='date'] input").sendKeys(Keys.COMMAND + "A");
+        $("[data-test-id='date'] input").sendKeys(BACK_SPACE);
+        $("[data-test-id='date'] input").setValue(secondMeetingDate);
+        $x("//span[contains(text(), 'Запланировать')]").click();
+        $x("//span[contains(text(), 'Перепланировать')]").click();
+        $("[data-test-id='success-notification']").shouldHave(Condition.exactText("Успешно! Встреча успешно запланирована на " + secondMeetingDate));
     }
 }
