@@ -9,11 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import ru.netology.delivery.data.DataGenerator;
 
-import java.time.Duration;
-
 import static com.codeborne.selenide.Selenide.*;
 import static org.openqa.selenium.Keys.BACK_SPACE;
-import static org.openqa.selenium.Keys.DELETE;
 
 class DeliveryTest {
     @BeforeAll
