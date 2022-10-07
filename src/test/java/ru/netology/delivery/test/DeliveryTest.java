@@ -1,11 +1,10 @@
 package ru.netology.delivery.test;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.Keys;
 import ru.netology.delivery.data.DataGenerator;
 
@@ -16,6 +15,12 @@ class DeliveryTest {
     @BeforeAll
     static void setUpAll() {
         WebDriverManager.chromedriver().setup();
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
+    @AfterAll
+    static void tearDownAll(){
+        SelenideLogger.removeListener("allure");
     }
 
     @BeforeEach
@@ -33,7 +38,7 @@ class DeliveryTest {
         var secondMeetingDate = DataGenerator.generateDate(daysToAddForSecondMeeting);
 
         $("[data-test-id='city'] input").setValue(validUser.getCity());
-        $("[data-test-id='date'] input").sendKeys(Keys.CONTROL + "A");
+        $("[data-test-id='date'] input").sendKeys(Keys.COMMAND + "A");
         $("[data-test-id='date'] input").sendKeys(BACK_SPACE);
         $("[data-test-id='date'] input").setValue(firstMeetingDate);
         $("[data-test-id='name'] input").setValue(validUser.getName());
@@ -42,7 +47,7 @@ class DeliveryTest {
         $x("//span[contains(text(), 'Запланировать')]").click();
         $("[data-test-id='success-notification'] .notification__content").shouldHave(Condition.exactText("Встреча успешно запланирована на " + firstMeetingDate));
 
-        $("[data-test-id='date'] input").sendKeys(Keys.CONTROL + "A");
+        $("[data-test-id='date'] input").sendKeys(Keys.COMMAND + "A");
         $("[data-test-id='date'] input").sendKeys(BACK_SPACE);
         $("[data-test-id='date'] input").setValue(secondMeetingDate);
         $x("//span[contains(text(), 'Запланировать')]").click();
